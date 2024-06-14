@@ -1,23 +1,23 @@
-const dkanUrl = process.env.DKAN_URL;
-
 import axios from "axios";
 
-function connectToCkan() {
+function connectToDkan() {
   return axios.create({
-    baseURL: dkanUrl,
+    baseURL: process.env.DKAN_URL,
   });
 }
 
-// Exemplo qualquer
-export async function queryDkan(datasetId: string, queryParams: any) {
-  const dkanClient = connectToCkan();
+// Get information about a dataset
+export async function detailDataset(datasetId: string) {
+  const dkanClient = connectToDkan();
+  const response = await dkanClient.get(`api/1/metastore/schemas/dataset/items/${datasetId}`);
 
-  const response = await dkanClient.get("/api/3/action/package_list", {
-    params: {
-      resource_id: datasetId,
-      ...queryParams,
-    },
-  });
+  return response.data;
+}
+
+// Get a resource from a dataset
+export async function queryResource(datasetId: string) {
+  const dkanClient = connectToDkan();
+  const response = await dkanClient.get(`api/1/datastore/query/${datasetId}/0`); // Distribution ID is generally 0
 
   return response.data;
 }
