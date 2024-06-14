@@ -1,15 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import { querySocrata } from "../services/socrataService";
+import { queryResource } from "../services/socrataService";
 
-export async function getSocrataData(
+export async function getResource(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
     const { datasetId } = req.params;
-    const queryParams = req.query;
-    const data = await querySocrata(datasetId, queryParams);
+    const data = await queryResource(datasetId);
     res.status(200).json(data);
   } catch (error) {
     next(error);

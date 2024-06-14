@@ -1,23 +1,16 @@
-const socrataUrl = process.env.SOCRATA_URL;
-
 import axios from "axios";
 
-function connectToCkan() {
+function connectToSocrata() {
   return axios.create({
-    baseURL: socrataUrl,
+    baseURL: process.env.SOCRATA_URL,
   });
 }
 
-// Exemplo qualquer
-export async function querySocrata(datasetId: string, queryParams: any) {
-  const socrataClient = connectToCkan();
+// Get a resource from Socrata
+export async function queryResource(datasetId: string) {
+  const socrataClient = connectToSocrata();
 
-  const response = await socrataClient.get("/api/3/action/package_list", {
-    params: {
-      resource_id: datasetId,
-      ...queryParams,
-    },
-  });
+  const response = await socrataClient.get(`resource/${datasetId}.json`);
 
   return response.data;
 }
