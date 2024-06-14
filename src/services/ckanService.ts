@@ -1,23 +1,25 @@
 import axios from "axios";
 
-const ckanUrl = process.env.CKAN_URL;
-
 function connectToCkan() {
   return axios.create({
-    baseURL: ckanUrl,
+    baseURL: process.env.CKAN_URL,
   });
 }
 
-// Exemplo qualquer
-export async function queryCkan(datasetId: string, queryParams: any) {
+// Get information about a dataset
+export async function detailDataset(datasetId: string) {
   const ckanClient = connectToCkan();
+  const response = await ckanClient.get(`/api/3/action/package_show?id=${datasetId}`);
 
-  const response = await ckanClient.get("/api/3/action/package_list", {
-    params: {
-      resource_id: datasetId,
-      ...queryParams,
-    },
-  });
+  console.log()
 
-  return response.data;
+  return response.data.result;
+}
+
+// Get a resource from a dataset
+export async function queryResource(resourceId: string) {
+  const ckanClient = connectToCkan();
+  const response = await ckanClient.get(`/api/3/action/resource_show?id=${resourceId}`);
+
+  return response.data.result;
 }
