@@ -12,12 +12,12 @@ export const swaggerDefinition = {
   ],
   components: {
     schemas: {
-      Test: {
+      Resource: {
         type: "object",
         properties: {
-          message: {
+          repository: {
             type: "string",
-            description: "A test message",
+            description: "Nome do repositorio do qual buscará dados CKAN, DKAN ou SOCRATA",
           },
         },
       },
