@@ -9,13 +9,15 @@ export async function getResource(
   next: NextFunction
 ) {
   try {
-    const { repository } = req.body;
+    let { repository } = req.body;
 
     if (!repository || typeof repository !== "string") {
       throw new Error("400");
     }
 
-    if (!["CKAN", "DKAN", "SOCRATA"].includes(repository.toUpperCase())) {
+    repository = repository.toUpperCase();
+    
+    if (!["CKAN", "DKAN", "SOCRATA"].includes(repository)) {
       throw new Error("404");
     }
 
@@ -23,7 +25,7 @@ export async function getResource(
     const responseData: ResponseData = {
       id: randomUUID(),
       title: "Example Data",
-      database: repository.toUpperCase() as "CKAN" | "DKAN" | "SOCRATA",
+      database: repository as "CKAN" | "DKAN" | "SOCRATA",
       data,
     };
 
